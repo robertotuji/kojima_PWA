@@ -145,6 +145,28 @@
   <script>
     function calcularMedia() {
       const ids = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+      let valores = [];
+      for (let id of ids) {
+        let valor = document.getElementById(id).value.trim().replace(",", ".");
+        if (valor === "") {
+          alert(`Preencha o campo Ponto ${id}.`);
+          return;
+        }
+        let numero = parseFloat(valor);
+        if (isNaN(numero)) {
+          alert(`Valor inválido no Ponto ${id}.`);
+          return;
+        }
+        valores.push(numero);
+      }
+
+      let maior = Math.max(...valores);
+      let menor = Math.min(...valores);
+      let media_bruta = (maior + menor) / 2;
+      let media = Math.round(media_bruta * 10) / 10;
+      document.getElementById("resultado").textContent = `Média entre o maior (${maior}) e o menor (${menor}) valor: ${media.toFixed(1)}`;
+    
+      const ids = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
       let soma = 0;
 
       for (let id of ids) {
