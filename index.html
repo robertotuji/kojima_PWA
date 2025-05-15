@@ -11,7 +11,69 @@
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("service-worker.js");
     }
-  </script>
+  
+    function traduzir(idioma) {
+      const textos = {
+        pt: {
+          'Calculadora de Média dos Pontos': 'Calculadora de Média dos Pontos',
+          'Ponto A': 'Ponto A',
+          'Ponto B': 'Ponto B',
+          'Ponto C': 'Ponto C',
+          'Ponto D': 'Ponto D',
+          'Ponto E': 'Ponto E',
+          'Ponto F': 'Ponto F',
+          'Ponto G': 'Ponto G',
+          'Ponto H': 'Ponto H',
+          'Calcular': 'Calcular',
+          'Limpar': 'Limpar',
+          'Preencha o campo Ponto': 'Preencha o campo Ponto',
+          'Valor inválido no Ponto': 'Valor inválido no Ponto'
+        },
+        jp: {
+          'Calculadora de Média dos Pontos': 'ポイント平均計算機',
+          'Ponto A': 'ポイントA',
+          'Ponto B': 'ポイントB',
+          'Ponto C': 'ポイントC',
+          'Ponto D': 'ポイントD',
+          'Ponto E': 'ポイントE',
+          'Ponto F': 'ポイントF',
+          'Ponto G': 'ポイントG',
+          'Ponto H': 'ポイントH',
+          'Calcular': '計算する',
+          'Limpar': 'クリア',
+          'Preencha o campo Ponto': 'ポイントを入力してください',
+          'Valor inválido no Ponto': '無効な値（ポイント）'
+        },
+        id: {
+          'Calculadora de Média dos Pontos': 'Kalkulator Rata-Rata Titik',
+          'Ponto A': 'Titik A',
+          'Ponto B': 'Titik B',
+          'Ponto C': 'Titik C',
+          'Ponto D': 'Titik D',
+          'Ponto E': 'Titik E',
+          'Ponto F': 'Titik F',
+          'Ponto G': 'Titik G',
+          'Ponto H': 'Titik H',
+          'Calcular': 'Hitung',
+          'Limpar': 'Bersihkan',
+          'Preencha o campo Ponto': 'Isi kolom Titik',
+          'Valor inválido no Ponto': 'Nilai tidak valid di Titik'
+        }
+      };
+
+      const lang = textos[idioma];
+      document.querySelector("h2").textContent = lang["Calculadora de Média dos Pontos"];
+      const campos = ['A','B','C','D','E','F','G','H'];
+      campos.forEach(ponto => {
+        document.querySelector("label[for=" + ponto + "]").textContent = lang["Ponto " + ponto];
+      });
+
+      const botoes = document.querySelectorAll(".button-container button");
+      botoes[0].textContent = lang["Calcular"];
+      botoes[1].textContent = lang["Limpar"];
+    }
+    </script>
+
   <style>
     body {
       font-family: "Segoe UI", sans-serif;
@@ -119,7 +181,14 @@
 <body>
   <div class="container">
     <h2>Calculadora de Média dos Pontos</h2>
+    
+    <div class="language-buttons" style="margin-bottom: 10px;">
+      <button onclick="traduzir('jp')" style="margin-right: 10px; padding: 6px 12px;">日本語</button>
+      <button onclick="traduzir('id')" style="padding: 6px 12px;">Bahasa Indonesia</button>
+<button onclick="traduzir('pt')" style="margin-left: 10px; padding: 6px 12px;">Português</button>
+    </div>
     <div class="image-container">
+
       <img src="doramu.png" alt="Diagrama técnico com pontos A a H">
     </div>
 
@@ -142,10 +211,12 @@
     <div id="resultado"></div>
   </div>
 
+  
   <script>
     function calcularMedia() {
       const ids = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
       let valores = [];
+
       for (let id of ids) {
         let valor = document.getElementById(id).value.trim().replace(",", ".");
         if (valor === "") {
@@ -164,27 +235,9 @@
       let menor = Math.min(...valores);
       let media_bruta = (maior + menor) / 2;
       let media = Math.round(media_bruta * 10) / 10;
-      document.getElementById("resultado").textContent = `Média entre o maior (${maior}) e o menor (${menor}) valor: ${media.toFixed(1)}`;
-    
-      const ids = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
-      let soma = 0;
 
-      for (let id of ids) {
-        let valor = document.getElementById(id).value.trim().replace(",", ".");
-        if (valor === '') {
-          alert(`Preencha o campo Ponto ${id}.`);
-          return;
-        }
-        let numero = parseFloat(valor);
-        if (isNaN(numero)) {
-          alert(`Valor inválido no Ponto ${id}.`);
-          return;
-        }
-        soma += numero;
-      }
-
-      const media = soma / ids.length;
-      document.getElementById("resultado").textContent = `Média dos pontos: ${media.toFixed(2)}`;
+      document.getElementById("resultado").textContent =
+        `Média entre o maior (${maior}) e o menor (${menor}) valor: ${media.toFixed(1)}`;
     }
 
     function limparCampos() {
@@ -195,6 +248,68 @@
       document.getElementById("resultado").textContent = '';
       document.getElementById("A").focus();
     }
-  </script>
+  
+    function traduzir(idioma) {
+      const textos = {
+        pt: {
+          'Calculadora de Média dos Pontos': 'Calculadora de Média dos Pontos',
+          'Ponto A': 'Ponto A',
+          'Ponto B': 'Ponto B',
+          'Ponto C': 'Ponto C',
+          'Ponto D': 'Ponto D',
+          'Ponto E': 'Ponto E',
+          'Ponto F': 'Ponto F',
+          'Ponto G': 'Ponto G',
+          'Ponto H': 'Ponto H',
+          'Calcular': 'Calcular',
+          'Limpar': 'Limpar',
+          'Preencha o campo Ponto': 'Preencha o campo Ponto',
+          'Valor inválido no Ponto': 'Valor inválido no Ponto'
+        },
+        jp: {
+          'Calculadora de Média dos Pontos': 'ポイント平均計算機',
+          'Ponto A': 'ポイントA',
+          'Ponto B': 'ポイントB',
+          'Ponto C': 'ポイントC',
+          'Ponto D': 'ポイントD',
+          'Ponto E': 'ポイントE',
+          'Ponto F': 'ポイントF',
+          'Ponto G': 'ポイントG',
+          'Ponto H': 'ポイントH',
+          'Calcular': '計算する',
+          'Limpar': 'クリア',
+          'Preencha o campo Ponto': 'ポイントを入力してください',
+          'Valor inválido no Ponto': '無効な値（ポイント）'
+        },
+        id: {
+          'Calculadora de Média dos Pontos': 'Kalkulator Rata-Rata Titik',
+          'Ponto A': 'Titik A',
+          'Ponto B': 'Titik B',
+          'Ponto C': 'Titik C',
+          'Ponto D': 'Titik D',
+          'Ponto E': 'Titik E',
+          'Ponto F': 'Titik F',
+          'Ponto G': 'Titik G',
+          'Ponto H': 'Titik H',
+          'Calcular': 'Hitung',
+          'Limpar': 'Bersihkan',
+          'Preencha o campo Ponto': 'Isi kolom Titik',
+          'Valor inválido no Ponto': 'Nilai tidak valid di Titik'
+        }
+      };
+
+      const lang = textos[idioma];
+      document.querySelector("h2").textContent = lang["Calculadora de Média dos Pontos"];
+      const campos = ['A','B','C','D','E','F','G','H'];
+      campos.forEach(ponto => {
+        document.querySelector("label[for=" + ponto + "]").textContent = lang["Ponto " + ponto];
+      });
+
+      const botoes = document.querySelectorAll(".button-container button");
+      botoes[0].textContent = lang["Calcular"];
+      botoes[1].textContent = lang["Limpar"];
+    }
+    </script>
+
 </body>
 </html>
