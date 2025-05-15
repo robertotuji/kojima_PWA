@@ -41,7 +41,7 @@
 
     .form-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(2, 100px);
       gap: 12px;
       max-width: 400px;
       width: 100%;
@@ -51,7 +51,7 @@
       display: flex;
       flex-direction: column;
       background: #fff;
-      padding: 10px;
+      padding: 6px;
       border-radius: 8px;
       box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
@@ -63,8 +63,8 @@
     }
 
     .form-group input {
-      padding: 10px;
-      font-size: 1em;
+      padding: 6px;
+      font-size: 0.95em;
       border: 2px solid #ff8800;
       border-radius: 6px;
     }
@@ -76,16 +76,17 @@
 
     .button-container {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
+      justify-content: center;
+      gap: 10px;
       gap: 10px;
       margin-top: 20px;
-      width: 100%;
-      max-width: 400px;
+      width: auto;
     }
 
     button {
       padding: 12px;
-      font-size: 1em;
+      font-size: 0.95em;
       border: none;
       border-radius: 6px;
       color: #fff;
@@ -136,8 +137,8 @@
   </div>
 
   <div class="button-container">
-    <button class="btn-primary" onclick="calcularMedia()">Calcular Média</button>
-    <button class="btn-secondary" onclick="limparCampos()">Limpar Campos</button>
+    <button class="btn-primary" onclick="calcularMedia()">Calcular</button>
+    <button class="btn-secondary" onclick="limparCampos()">Limpar</button>
   </div>
 
   <div id="resultado"></div>
