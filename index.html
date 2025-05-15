@@ -2,10 +2,9 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calculadora de Média dos Pontos</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Calculadora de Média - Kojima</title>
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#ff8800" />
   <script>
@@ -16,9 +15,15 @@
   <style>
     body {
       font-family: "Segoe UI", sans-serif;
-      background-color: #f6f6f6;
+      background-color: #f5f5f5;
       margin: 0;
       padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      width: 320px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -31,31 +36,25 @@
     }
 
     .image-container img {
-      max-width: 100%; height: auto; display: block; margin: 0 auto;
+      width: 100%;
       max-width: 100%;
-      width: 300px;
       height: auto;
-      margin: 0 auto 20px auto;
       display: block;
-      border: 1px solid #ccc;
+      margin-bottom: 16px;
       border-radius: 8px;
+      border: 1px solid #ccc;
     }
 
     .form-grid {
       display: grid;
-      grid-template-columns: repeat(2, 100px);
+      grid-template-columns: repeat(2, 1fr);
       gap: 12px;
-      max-width: 400px;
       width: 100%;
     }
 
     .form-group {
       display: flex;
       flex-direction: column;
-      background: #fff;
-      padding: 6px;
-      border-radius: 8px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
 
     .form-group label {
@@ -65,35 +64,29 @@
     }
 
     .form-group input {
-      padding: 6px;
-      font-size: 0.95em;
+      padding: 8px;
+      font-size: 1em;
       border: 2px solid #ff8800;
       border-radius: 6px;
-    }
-
-    .form-group input:focus {
-      outline: none;
-      border-color: #ff6f00;
+      text-align: center;
     }
 
     .button-container {
       display: flex;
-      flex-direction: row;
-      justify-content: center;
-      gap: 10px;
-      gap: 10px;
-      margin-top: 20px;
-      width: auto;
+      justify-content: space-between;
+      width: 100%;
+      margin-top: 16px;
     }
 
-    button {
-      padding: 12px;
-      font-size: 0.95em;
+    .button-container button {
+      flex: 1;
+      padding: 10px;
+      font-size: 1em;
+      margin: 0 5px;
       border: none;
       border-radius: 6px;
-      color: #fff;
+      color: white;
       cursor: pointer;
-      transition: 0.2s ease;
     }
 
     .btn-primary {
@@ -122,38 +115,32 @@
   </style>
 </head>
 <body>
-  <h2>Calculadora de Média dos Pontos</h2>
-  <div class="image-container">
-    <img src="doramu.png" alt="Diagrama técnico com pontos A a H">
-  </div>
+  <div class="container">
+    <h2>Calculadora de Média dos Pontos</h2>
+    <div class="image-container">
+      <img src="doramu.png" alt="Diagrama técnico com pontos A a H">
+    </div>
 
-  <div class="form-grid">
-    <div class="form-group"><label for="A">Ponto A</label><input type="text" id="A"></div>
-    <div class="form-group"><label for="B">Ponto B</label><input type="text" id="B"></div>
-    <div class="form-group"><label for="C">Ponto C</label><input type="text" id="C"></div>
-    <div class="form-group"><label for="D">Ponto D</label><input type="text" id="D"></div>
-    <div class="form-group"><label for="E">Ponto E</label><input type="text" id="E"></div>
-    <div class="form-group"><label for="F">Ponto F</label><input type="text" id="F"></div>
-    <div class="form-group"><label for="G">Ponto G</label><input type="text" id="G"></div>
-    <div class="form-group"><label for="H">Ponto H</label><input type="text" id="H"></div>
-  </div>
+    <div class="form-grid">
+      <div class="form-group"><label for="A">Ponto A</label><input type="text" id="A"></div>
+      <div class="form-group"><label for="B">Ponto B</label><input type="text" id="B"></div>
+      <div class="form-group"><label for="C">Ponto C</label><input type="text" id="C"></div>
+      <div class="form-group"><label for="D">Ponto D</label><input type="text" id="D"></div>
+      <div class="form-group"><label for="E">Ponto E</label><input type="text" id="E"></div>
+      <div class="form-group"><label for="F">Ponto F</label><input type="text" id="F"></div>
+      <div class="form-group"><label for="G">Ponto G</label><input type="text" id="G"></div>
+      <div class="form-group"><label for="H">Ponto H</label><input type="text" id="H"></div>
+    </div>
 
-  <div class="button-container">
-    <button class="btn-primary" onclick="calcularMedia()">Calcular</button>
-    <button class="btn-secondary" onclick="limparCampos()">Limpar</button>
-  </div>
+    <div class="button-container">
+      <button class="btn-primary" onclick="calcularMedia()">Calcular</button>
+      <button class="btn-secondary" onclick="limparCampos()">Limpar</button>
+    </div>
 
-  <div id="resultado"></div>
+    <div id="resultado"></div>
+  </div>
 
   <script>
-    // função desativada para navegação manual
-    /* function nextField(event, nextId) {
-      if (event.target.value.trim() !== '') {
-        document.getElementById(nextId).focus();
-      }
-    }
-    */
-
     function calcularMedia() {
       const ids = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
       let soma = 0;
