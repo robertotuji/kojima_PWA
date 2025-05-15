@@ -1,0 +1,22 @@
+
+{
+  "name": "Calculadora de Média dos Pontos",
+  "short_name": "Calc Média",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ff8800",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon-192-transparent.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512-transparent.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

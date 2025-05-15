@@ -1,0 +1,186 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Calculadora Média PWA</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#ff8800" />
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("service-worker.js");
+    }
+  </script>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h2 {
+      text-align: center;
+      color: #000;
+      margin-bottom: 20px;
+    }
+
+    .image-container {
+      margin-bottom: 30px;
+    }
+
+    .image-container img {
+      width: 320px;
+      height: auto;
+      max-width: 90vw;
+      border: 2px solid #999;
+      border-radius: 10px;
+    }
+
+    .input-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      width: 100%;
+      max-width: 450px;
+      margin-bottom: 20px;
+    }
+
+    .input-box {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 12px 16px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .input-box label {
+      font-size: 1em;
+      margin-bottom: 5px;
+      color: #000;
+    }
+
+    .input-box input {
+      font-size: 1.2em;
+      padding: 10px;
+      border: 2px solid #ff8800;
+      border-radius: 6px;
+    }
+
+    .input-box input:focus {
+      border-color: #ff6f00;
+      outline: none;
+    }
+
+    .btn-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      max-width: 450px;
+      align-items: center;
+    }
+
+    button {
+      width: 100%;
+      font-size: 1.2em;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      color: white;
+    }
+
+    .btn-calculate {
+      background-color: #ff8800;
+    }
+
+    .btn-calculate:hover {
+      background-color: #ff6f00;
+    }
+
+    .btn-clear {
+      background-color: #000000;
+    }
+
+    .btn-clear:hover {
+      background-color: #333333;
+    }
+
+    #resultado {
+      margin-top: 15px;
+      font-size: 1.3em;
+      color: #000;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h2>Calculadora de Média dos Pontos</h2>
+  <div class="image-container">
+    <img src="Doramu.png" alt="Diagrama técnico com pontos A a H" />
+  </div>
+
+  <div class="input-grid">
+    <div class="input-box"><label for="A">Ponto A</label><input type="text" id="A" oninput="nextField(event, 'B')"></div>
+    <div class="input-box"><label for="B">Ponto B</label><input type="text" id="B" oninput="nextField(event, 'C')"></div>
+    <div class="input-box"><label for="C">Ponto C</label><input type="text" id="C" oninput="nextField(event, 'D')"></div>
+    <div class="input-box"><label for="D">Ponto D</label><input type="text" id="D" oninput="nextField(event, 'E')"></div>
+    <div class="input-box"><label for="E">Ponto E</label><input type="text" id="E" oninput="nextField(event, 'F')"></div>
+    <div class="input-box"><label for="F">Ponto F</label><input type="text" id="F" oninput="nextField(event, 'G')"></div>
+    <div class="input-box"><label for="G">Ponto G</label><input type="text" id="G" oninput="nextField(event, 'H')"></div>
+    <div class="input-box"><label for="H">Ponto H</label><input type="text" id="H"></div>
+  </div>
+
+  <div class="btn-container">
+    <button class="btn-calculate" onclick="calcularMedia()">Calcular Média</button>
+    <button class="btn-clear" onclick="limparCampos()">Limpar Campos</button>
+  </div>
+
+  <div id="resultado"></div>
+
+  <script>
+    function nextField(event, nextId) {
+      if (event.target.value.trim() !== '') {
+        document.getElementById(nextId).focus();
+      }
+    }
+
+    function calcularMedia() {
+      const ids = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+      let soma = 0;
+
+      for (let id of ids) {
+        let valor = document.getElementById(id).value.trim().replace(",", ".");
+        if (valor === '') {
+          alert(`Preencha o campo Ponto ${id}.`);
+          return;
+        }
+        let numero = parseFloat(valor);
+        if (isNaN(numero)) {
+          alert(`Valor inválido no Ponto ${id}.`);
+          return;
+        }
+        soma += numero;
+      }
+
+      const media = soma / ids.length;
+      document.getElementById("resultado").textContent = `Média dos pontos: ${media.toFixed(2)}`;
+    }
+
+    function limparCampos() {
+      const ids = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+      for (let id of ids) {
+        document.getElementById(id).value = '';
+      }
+      document.getElementById("resultado").textContent = '';
+      document.getElementById("A").focus();
+    }
+  </script>
+</body>
+</html>
