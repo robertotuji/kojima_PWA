@@ -12,7 +12,9 @@
       navigator.serviceWorker.register("service-worker.js");
     }
   
-    function traduzir(idioma) {
+    let idiomaAtual = "pt";
+function traduzir(idioma) {
+  idiomaAtual = idioma;
       const textos = {
         pt: {
           'Calculadora de Média dos Pontos': 'Calculadora de Média dos Pontos',
@@ -236,7 +238,17 @@
       let media_bruta = (maior + menor) / 2;
       let media = Math.round(media_bruta * 10) / 10;
 
+      
+      let frase;
+      if (idiomaAtual === 'jp') {
+        frase = `最大値（${maior}）と最小値（${menor}）の平均: ${media.toFixed(1)}`;
+      } else if (idiomaAtual === 'id') {
+        frase = `Rata-rata dari nilai tertinggi (${maior}) dan terendah (${menor}): ${media.toFixed(1)}`;
+      } else {
+        frase = `Média entre o maior (${maior}) e o menor (${menor}) valor: ${media.toFixed(1)}`;
+      }
       document.getElementById("resultado").textContent =
+    
         `Média entre o maior (${maior}) e o menor (${menor}) valor: ${media.toFixed(1)}`;
     }
 
@@ -245,11 +257,23 @@
       for (let id of ids) {
         document.getElementById(id).value = '';
       }
-      document.getElementById("resultado").textContent = '';
+      
+      let frase;
+      if (idiomaAtual === 'jp') {
+        frase = `最大値（${maior}）と最小値（${menor}）の平均: ${media.toFixed(1)}`;
+      } else if (idiomaAtual === 'id') {
+        frase = `Rata-rata dari nilai tertinggi (${maior}) dan terendah (${menor}): ${media.toFixed(1)}`;
+      } else {
+        frase = `Média entre o maior (${maior}) e o menor (${menor}) valor: ${media.toFixed(1)}`;
+      }
+      document.getElementById("resultado").textContent =
+     '';
       document.getElementById("A").focus();
     }
   
-    function traduzir(idioma) {
+    let idiomaAtual = "pt";
+function traduzir(idioma) {
+  idiomaAtual = idioma;
       const textos = {
         pt: {
           'Calculadora de Média dos Pontos': 'Calculadora de Média dos Pontos',
