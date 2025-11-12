@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>Tatemae &amp; Honne Analyzer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root { --bg:#0f172a; --card:#111827; --txt:#e5e7eb; --muted:#9ca3af; --acc:#22d3ee; --danger:#f87171; --safe:#4ade80; }
+    * { box-sizing: border-box; }
+    body { background:var(--bg); color:var(--txt); font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Meiryo", "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; margin:0; }
+    a { color: inherit; }
+    .wrap { max-width: 980px; margin: 32px auto; padding: 0 16px; }
+    .card { background: var(--card); border: 1px solid #1f2937; border-radius: 12px; padding: 20px; box-shadow: 0 0 0 1px #0b1220 inset; }
+    h1 { font-size: 22px; margin: 0 0 12px; }
+    label { font-size: 13px; color: var(--muted); display:block; margin: 10px 0 6px; }
+    textarea, input, select { width:100%; border-radius:10px; border:1px solid #273449; background:#0b1220; color:var(--txt); padding:12px; }
+    textarea::placeholder, input::placeholder { color:#475569; }
+    textarea:focus, input:focus, select:focus { outline:2px solid var(--acc); outline-offset: 2px; border-color:transparent; }
+    .row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px; }
+    .btns { display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; }
+    button { background: var(--acc); color:#001219; border:0; border-radius:10px; padding:10px 16px; font-weight:600; cursor:pointer; transition: transform .15s ease, opacity .2s ease; }
+    button:hover { transform: translateY(-1px); opacity:0.92; }
+    button.secondary { background: #334155; color:#e5e7eb; }
+    button.secondary:hover { background:#3f4c64; }
+    pre { white-space: pre-wrap; word-break: break-word; font-family: "IBM Plex Mono", "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size: 13px; background:#0b1220; padding:12px; border-radius:12px; border:1px solid #1f2937; }
+    table { width:100%; border-collapse: collapse; margin-top: 12px; overflow-x:auto; }
+    th, td { border-bottom: 1px solid #273449; padding: 10px 8px; font-size: 13px; vertical-align: top; }
+    th { text-align:left; color: var(--muted); font-weight:600; }
+    tr.conf-high { background: rgba(74, 222, 128, 0.1); }
+    tr.conf-low { background: rgba(248, 113, 113, 0.12); }
+    tr.conf-medium { background: rgba(34, 211, 238, 0.08); }
+    .badge { display:inline-block; padding:3px 10px; border-radius:999px; background:#1e293b; color:#bae6fd; font-size:12px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .small { color: var(--muted); font-size: 12px; }
+    .summary-probs { display:flex; gap:14px; flex-wrap:wrap; align-items:center; font-size:13px; }
+    .summary-probs b { font-size: 16px; }
+    ul { padding-left: 20px; }
+    @media (max-width: 640px) {
+      .card { padding: 18px; }
+      h1 { font-size: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>🈺 Tatemae &amp; Honne Analyzer</h1>
+      <p class="small">Cole um texto em <strong>japonês</strong>, ajuste contexto e preferências, e clique em <strong>Analisar</strong>.</p>
+      <form id="form">
+        <label for="text">Texto (JP)</label>
+        <textarea id="text" name="text" rows="8" placeholder="例：この度はご提案いただき、誠にありがとうございます。社内調整の上、改めてご連絡申し上げます。"></textarea>
+
+        <div class="row">
+          <div>
+            <label for="context">Contexto (opcional)</label>
+            <input id="context" name="context" placeholder="e-mail corporativo, senpai/kohai, reunião com cliente...">
+          </div>
+          <div>
+            <label for="mode">Modo</label>
+            <select id="mode" name="mode">
+              <option value="profundo" selected>Profundo</option>
+              <option value="rapido">Rápido</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="lang">Idioma de saída</label>
+            <select id="lang" name="lang">
+              <option value="PT-BR" selected>Português</option>
+              <option value="JP">日本語</option>
+              <option value="EN">English</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="btns">
+          <button type="submit">Analisar</button>
+          <button type="button" class="secondary" id="copyBtn">Copiar análise</button>
+          <button type="button" class="secondary" id="csvBtn">Exportar CSV</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="card" style="margin-top:16px;">
+      <div id="output"></div>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('form');
+    const out = document.getElementById('output');
+    const copyBtn = document.getElementById('copyBtn');
+    const csvBtn = document.getElementById('csvBtn');
+
+    const fmtPct = (value) => {
+      const number = Number(value) || 0;
+      return new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 0 }).format(number * 100) + '%';
+    };
+
+    const confidenceClass = (confidence) => {
+      if (confidence >= 0.75) return 'conf-high';
+      if (confidence <= 0.6) return 'conf-low';
+      return 'conf-medium';
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(form);
+      out.innerHTML = "<span class='small'>Analisando…</span>";
+
+      const res = await fetch('/analyze', { method: 'POST', body: fd });
+      const data = await res.json();
+
+      if (data.error) {
+        out.innerHTML = `<p class="small">${data.error}</p>`;
+        return;
+      }
+
+      const header = `
+        <p><span class="badge">Resumo</span> ${data.resumo}</p>
+        <div class="summary-probs small">
+          <span>Probabilidades — Tatemae: <b>${fmtPct(data.probs.tatemae)}</b></span>
+          <span>Honne: <b>${fmtPct(data.probs.honne)}</b></span>
+        </div>
+      `;
+
+      const rows = (data.tabela || []).map(r => `
+        <tr class="${confidenceClass(r.confianca)}">
+          <td>${r.trecho}</td>
+          <td>${r.sinal}</td>
+          <td>${r.leitura_tatemae}</td>
+          <td>${r.leitura_honne}</td>
+          <td>${r.evidencias}</td>
+          <td>${(Number(r.confianca) * 100).toFixed(0)}%</td>
+        </tr>
+      `).join('');
+
+      const table = rows
+        ? `
+            <table>
+              <thead>
+                <tr>
+                  <th>Trecho JP</th>
+                  <th>Sinal</th>
+                  <th>Leitura Tatemae</th>
+                  <th>Leitura Honne</th>
+                  <th>Evidências</th>
+                  <th>Confiança</th>
+                </tr>
+              </thead>
+              <tbody>${rows}</tbody>
+            </table>
+          `
+        : '<p class="small">Nenhuma sentença válida encontrada.</p>';
+
+      const ciencia = `
+        <p><span class="badge">Análise científica</span></p>
+        <pre>${data.analise_cientifica}</pre>
+      `;
+
+      const recs = `
+        <p><span class="badge">Recomendações</span></p>
+        <ul>${(data.recomendacoes || []).map(x => `<li>${x}</li>`).join('')}</ul>
+        <p class="small">Limites: ${(data.limites || []).join(' / ')}</p>
+      `;
+
+      out.innerHTML = header + table + ciencia + recs;
+      window._lastAnalysisText = `${data.resumo}\n\n${data.analise_cientifica}`;
+    });
+
+    copyBtn.addEventListener('click', async () => {
+      const txt = window._lastAnalysisText || 'Sem análise para copiar.';
+      await navigator.clipboard.writeText(txt);
+      alert('Análise copiada!');
+    });
+
+    csvBtn.addEventListener('click', () => {
+      window.location.href = '/export/csv';
+    });
+  </script>
+</body>
+</html>
