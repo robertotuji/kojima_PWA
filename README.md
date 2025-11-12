@@ -1,59 +1,48 @@
+# Tatemae & Honne Analyzer (FastAPI)
 
-# 📱 Aplicativo PWA da Calculadora de Média – Kojima Machine Factory
+Aplicativo FastAPI para interpretar Tatemae (fachada social) e Honne (intenção real) em textos japoneses, combinando heurísticas linguísticas e insights socioculturais.
 
-Este projeto é uma calculadora moderna de média entre 8 pontos, desenvolvida como Progressive Web App (PWA), otimizada para uso em tablets e celulares no ambiente industrial.
+## Requisitos
 
----
+```bash
+python -m pip install -r requirements.txt
+python -m unidic_lite.download
+```
 
-## 🔗 Acesse o App
+> O comando `unidic_lite.download` instala um dicionário leve necessário para a tokenização japonesa com Fugashi.
 
-👉 **[Clique aqui para abrir o aplicativo](https://robertotuji.github.io/kojima_PWA/)**  
-*(Recomendado abrir pelo navegador Google Chrome ou Microsoft Edge)*
+## Executando localmente
 
----
+```bash
+uvicorn app:app --reload
+```
 
-## 📲 Como instalar no celular ou tablet
+Abra: <http://127.0.0.1:8000/>
 
-1. Acesse o link acima no navegador do celular
-2. Clique no ícone de **três pontinhos** (menu do navegador)
-3. Selecione **“Adicionar à tela inicial”**
-4. O app ficará instalado como um aplicativo nativo
+## Como funciona
 
----
+- **Heurística híbrida**: identifica hedges/mitigadores, honoríficos (keigo) e sinais de franqueza/negação para estimar Tatemae vs. Honne em cada sentença.
+- **Probabilidades agregadas**: calcula médias documentais de Tatemae/Honne e gera um resumo executivo (5–7 linhas).
+- **Análise científica**: referencia pragmática, antropologia/psicologia cultural (uchi/soto, amae/enryo, giri/ninjō, Hofstede, Hall, Goffman, Brown & Levinson).
+- **Recomendações interculturais**: frases-modelo (JP↔PT/EN) para confirmar entendimentos com cortesia.
+- **Exportação CSV**: baixa a tabela de sentenças com sinais, leituras e confiança.
+- **Privacidade**: não registra textos analisados no console por padrão.
 
-## 🎯 Funcionalidades
+## Estrutura de pastas
 
-- Interface responsiva e moderna
-- Suporte a números negativos e decimais
-- Avanço automático entre os campos
-- Cálculo instantâneo da média de 8 pontos
-- Design em preto e laranja com imagem técnica
-- Funciona **offline** após a instalação
+```
+.
+├── app.py
+├── requirements.txt
+├── static/
+│   └── .keep
+├── templates/
+│   └── index.html
+└── README.md
+```
 
----
+## Considerações e extensões
 
-## 🛠️ Tecnologias utilizadas
-
-- HTML5 + CSS3 (com layout responsivo)
-- JavaScript Vanilla
-- Progressive Web App (manifest + service worker)
-- GitHub Pages para publicação gratuita
-
----
-
-## 🏢 Sobre a Kojima
-
-**Kojima Machine Factory – 小島機械製作所**  
-Fábrica especializada em estruturas soldadas e usinadas para prensas industriais, automação, robótica e moldes de precisão.
-
----
-
-## 👤 Autor
-
-**Roberto Tuji**  
-Consultor transcultural e desenvolvedor de soluções inovadoras para integração profissional no Japão.  
-Email: robertotuji@gmail.com
-
----
-
-> Este projeto é parte de uma iniciativa para digitalizar processos e treinamentos internos com ferramentas acessíveis e multiplataforma.
+- Este MVP prioriza heurísticas explicáveis; você pode incorporar embeddings ou modelos transformer japoneses para maior precisão.
+- Ajuste pesos das listas de sinais conforme o domínio (corporativo, acadêmico, cotidiano).
+- Inclua autenticação ou persistência se precisar armazenar históricos (não implementado por questões de privacidade).
